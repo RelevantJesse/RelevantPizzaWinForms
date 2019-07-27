@@ -103,7 +103,9 @@
             // 
             this.dgResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgResults.Location = new System.Drawing.Point(12, 209);
+            this.dgResults.MultiSelect = false;
             this.dgResults.Name = "dgResults";
+            this.dgResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgResults.Size = new System.Drawing.Size(776, 198);
             this.dgResults.TabIndex = 7;
             // 
@@ -115,6 +117,7 @@
             this.btnSelectCustomer.TabIndex = 8;
             this.btnSelectCustomer.Text = "Select Customer";
             this.btnSelectCustomer.UseVisualStyleBackColor = true;
+            this.btnSelectCustomer.Click += new System.EventHandler(this.BtnSelectCustomer_Click);
             // 
             // btnCancel
             // 
@@ -142,7 +145,7 @@
             this.Controls.Add(this.txtPhone);
             this.Controls.Add(this.txtName);
             this.Name = "frmCustomerSearch";
-            this.Text = "frmCustomerSearch";
+            this.Text = "Find Customer";
             ((System.ComponentModel.ISupportInitialize)(this.dgResults)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
