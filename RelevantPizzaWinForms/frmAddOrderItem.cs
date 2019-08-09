@@ -14,7 +14,22 @@ namespace RelevantPizzaWinForms
 {
     public partial class frmAddOrderItem : Form
     {
-        PizzaContext _context = new PizzaContext();
+        private PizzaContext _context = new PizzaContext();
+
+        private BindingList<InventoryItem> _inventoryItems;
+        public BindingList<InventoryItem> InventoryItems
+        {
+            get
+            {
+                if(_inventoryItems == null)
+                {
+                    _inventoryItems = new BindingList<InventoryItem>();
+                }
+
+                return _inventoryItems;
+            }
+        }
+        public OrderItemType Type { get; private set; }
 
         public frmAddOrderItem()
         {
@@ -37,6 +52,15 @@ namespace RelevantPizzaWinForms
         private void AddOrderItem_Load(object sender, EventArgs e)
         {
             PopulateDropdowns();
+
+            dgOrderItemDetails.DataSource = InventoryItems;
+            foreach (DataGridViewColumn column in dgOrderItemDetails.Columns)
+            {
+                if(column.Name != "Name" && column.Name != "Type")
+                {
+                    column.Visible = false;
+                }
+            }
         }
 
         private void CmbDetailType_SelectedValueChanged(object sender, EventArgs e)
@@ -61,6 +85,53 @@ namespace RelevantPizzaWinForms
                 lblDetailName.Text = string.Empty;
                 cmbDetailItems.DataSource = null;
             }
+        }
+
+        private void BtnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void BtnAddDetail_Click(object sender, EventArgs e)
+        {
+            if(cmbDetailItems.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a detail item");
+                return;
+            }
+
+            InventoryItem item = _context.InventoryItems.FirstOrDefault(i => i.ID == (int)cmbDetailItems.SelectedValue);
+
+            if (!InventoryItems.Any(i => i.ID == item.ID))
+            {
+                InventoryItems.Add(item);
+            }
+        }
+
+        private void BtnAddItem_Click(object sender, EventArgs e)
+        {
+            if(cmbItemType.SelectedIndex == -1)
+            {
+                MessageBox.Show("Must select Item Type");
+                return;
+            }
+
+            if (InventoryItems.Count == 0)
+            {
+                MessageBox.Show("Must add detail items");
+                return;
+            }
+
+            Type = (OrderItemType)cmbItemType.SelectedItem;
+
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+
+        private void BtnClearItem_Click(object sender, EventArgs e)
+        {
+            dgOrderItemDetails.Rows.Clear();
         }
     }
 }

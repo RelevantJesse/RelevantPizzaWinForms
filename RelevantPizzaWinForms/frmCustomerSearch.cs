@@ -27,20 +27,7 @@ namespace RelevantPizzaWinForms
 
         private void BtnSearch_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(txtAddress.Text)
-                && string.IsNullOrWhiteSpace(txtName.Text)
-                && string.IsNullOrWhiteSpace(txtPhone.Text))
-            {
-                dgResults.DataSource = null;
-                return;
-            }
-
-            List<Customer> customers = _context.Customers.Where(c => txtName.Text == "" || c.FirstName.Contains(txtName.Text) || c.LastName.Contains(txtName.Text))
-                                                         .Where(c => txtAddress.Text == "" || c.StreetAddress.Contains(txtAddress.Text))
-                                                         .Where(c => txtPhone.Text == "" || c.PhoneNumber.Contains(txtPhone.Text))
-                                                        .ToList();
-
-            dgResults.DataSource = customers;
+            dgResults.DataSource = Customer.FindCustomers(txtAddress.Text, txtName.Text, txtPhone.Text);
         }
 
         private void BtnSelectCustomer_Click(object sender, EventArgs e)
